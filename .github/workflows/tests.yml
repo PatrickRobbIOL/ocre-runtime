@@ -1,14 +1,9 @@
 name: Tests
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_run:
+    workflows: [Build]
+    types:
+      - completed
 jobs:
     tests:
         runs-on: zephyr-xlarge-runner
@@ -22,7 +17,7 @@ jobs:
       
             - name: Flash Validation Tests
               run: |
-                  cd tests && bash beginTests.sh "flashValidation"
+                cd tests && bash beginTests.sh "flashValidation"
 
             - name: Print Flash Validation Logs
               if: always()
